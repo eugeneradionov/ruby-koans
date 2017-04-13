@@ -31,6 +31,22 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
+  return 0 if dice.empty? || dice.size > 5
+  sum = 0
+  frequency = dice.group_by { |el| el }.map { |k, v| [k, v.length] }.to_h
+  frequency.each do |key, value|
+    val_mod = value % 3
+    val_div = value / 3
+    sum += key * 100  if val_div >= 1
+    case key
+      when 1
+        sum += 900 if val_div >= 1
+        sum += val_mod * 100
+      when 5
+        sum += val_mod * 50
+    end
+  end
+  sum
 end
 
 class AboutScoringProject < Neo::Koan
